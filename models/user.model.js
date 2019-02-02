@@ -86,6 +86,15 @@ UserSchema.methods.Companies = async function() {
   return companies;
 };
 
+
+UserSchema.methods.groups = async function() {
+  let err, groups;
+  [err, groups] = await to(Company.find({ "users.user": this._id }));
+  if (err) TE("err getting groups");
+  return groups;
+};
+
+
 UserSchema.virtual("full_name").set(function(name) {
   var split = name.split(" ");
   this.first = split[0];

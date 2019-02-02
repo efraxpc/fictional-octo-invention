@@ -2,6 +2,7 @@ const express 			= require('express');
 const router 			= express.Router();
 
 const UserController 	= require('../controllers/user.controller');
+const GroupController 	= require('../controllers/group.controller');
 const CompanyController = require('../controllers/company.controller');
 const HomeController 	= require('../controllers/home.controller');
 
@@ -22,6 +23,11 @@ router.get(     '/users',           passport.authenticate('jwt', {session:false}
 router.put(     '/users',           passport.authenticate('jwt', {session:false}), UserController.update);     // U
 router.delete(  '/users',           passport.authenticate('jwt', {session:false}), UserController.remove);     // D
 router.post(    '/users/login',     UserController.login);
+
+router.post(    '/groups',           passport.authenticate('jwt', {session:false}), GroupController.create);     // C
+router.get(     '/groups',           passport.authenticate('jwt', {session:false}), GroupController.getAll);     // R
+router.put(     '/groups',           passport.authenticate('jwt', {session:false}), GroupController.update);     // U
+router.delete(  '/groups',           passport.authenticate('jwt', {session:false}), GroupController.remove);     // D
 
 router.post(    '/companies',             passport.authenticate('jwt', {session:false}), CompanyController.create);                  // C
 router.get(     '/companies',             passport.authenticate('jwt', {session:false}), CompanyController.getAll);                  // R
