@@ -5,6 +5,7 @@ const UserController 	= require('../controllers/user.controller');
 const GroupController 	= require('../controllers/group.controller');
 const CompanyController = require('../controllers/company.controller');
 const HomeController 	= require('../controllers/home.controller');
+const LicenceController 	= require('../controllers/licence.controller');
 
 const custom 	        = require('./../middleware/custom');
 
@@ -28,6 +29,11 @@ router.post(    '/groups',           passport.authenticate('jwt', {session:false
 router.get(     '/groups',           passport.authenticate('jwt', {session:false}), GroupController.getAll);     // R
 router.put(     '/groups',           passport.authenticate('jwt', {session:false}), GroupController.update);     // U
 router.delete(  '/groups',           passport.authenticate('jwt', {session:false}), GroupController.remove);     // D
+
+router.post(    '/licences',           passport.authenticate('jwt', {session:false}), LicenceController.create);     // C
+router.get(     '/licences',           passport.authenticate('jwt', {session:false}), LicenceController.getAll);     // R
+//router.put(     '/licences',           passport.authenticate('jwt', {session:false}), LicenceController.update);     // U
+//router.delete(  '/licences',           passport.authenticate('jwt', {session:false}), LicenceController.remove);     // D
 
 router.post(    '/companies',             passport.authenticate('jwt', {session:false}), CompanyController.create);                  // C
 router.get(     '/companies',             passport.authenticate('jwt', {session:false}), CompanyController.getAll);                  // R

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const bcrypt_p = require("bcrypt-promise");
 const jwt = require("jsonwebtoken");
-const Company = require("./company.model");
+const Licence = require("./licence.model");
 const validate = require("mongoose-validator");
 const { TE, to } = require("../services/util.service");
 const CONFIG = require("../config/config");
@@ -92,6 +92,13 @@ UserSchema.methods.groups = async function() {
   [err, groups] = await to(Company.find({ "users.user": this._id }));
   if (err) TE("err getting groups");
   return groups;
+};
+
+UserSchema.methods.licences = async function() {
+  let err, licences;
+  [err, licences] = await to(Licence.find({ "users.user": this._id }));
+  if (err) TE("err getting licences");
+  return licences;
 };
 
 
