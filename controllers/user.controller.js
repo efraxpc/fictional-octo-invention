@@ -36,6 +36,18 @@ const get = async function(req, res) {
 };
 module.exports.get = get;
 
+const getAll = async function(req, res) {
+  res.setHeader("Content-Type", "application/json");
+  return User.find({}, function(err, users) {
+    if (err) {
+      res.send("Error guetting users");
+      next();
+    }
+    res.json(users);
+  });
+};
+module.exports.getAll = getAll;
+
 const update = async function(req, res) {
   let err, user, data;
   user = req.user;
