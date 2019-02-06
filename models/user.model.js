@@ -127,9 +127,15 @@ UserSchema.methods.getJWT = function() {
 };
 
 UserSchema.methods.toWeb = function() {
-  let json = this.toJSON();
+  const json = this.toJSON();
   json.id = this._id; //this is for the front end
   return json;
 };
+
+UserSchema.methods.toJSON = function() {
+  const obj = this.toObject()
+  delete obj.password
+  return obj
+}
 
 let User = (module.exports = mongoose.model("User", UserSchema));
