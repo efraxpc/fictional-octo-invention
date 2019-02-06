@@ -135,6 +135,10 @@ UserSchema.methods.toWeb = function() {
 UserSchema.methods.toJSON = function() {
   const obj = this.toObject()
   delete obj.password
+  delete obj._v
+  delete obj._id
+  delete obj.updatedAt
+  delete obj.createdAt
   return obj
 }
 
