@@ -1,36 +1,35 @@
-const { Licence } = require('../models');
-const { to, ReE, ReS } = require('../services/util.service');
+const { Licence } = require("../models");
+const { User } = require("../models");
+const { to, ReE, ReS } = require("../services/util.service");
 
-const create = async function(req, res){
-    res.setHeader('Content-Type', 'application/json');
-    let err, licence;
-    let user = req.body.user;
+const create = async function(req, res) {
+  res.setHeader("Content-Type", "application/json");
+  let err, licence;
+  let userEmail = req.body.user;
+  let licence_info = req.body;
+  let user = User.findOne({ email: userEmail });
 
-    let licence_info = req.body;
-    licence_info.users = [{user:user._id}];
+  licence_info.users = [{ user }];
 
-    [err, licence] = await to(Licence.create(licence_info));
-    if(err) return ReE(res, err, 422);
+  [err, licence] = await to(Licence.create(licence_info));
 
-    return ReS(res,{licence:licence.toWeb()}, 201);
+  if (err) return ReE(res, err, 422);
 
-}
+  return ReS(res, { licence: licence.toWeb() }, 201);
+};
 module.exports.create = create;
 
+const getAll = async function(req, res) {
+  res.setHeader("Content-Type", "application/json");
+  let licences_json = [];
 
-const getAll = async function(req, res){
-    res.setHeader('Content-Type', 'application/json');
-    let user = req.user;
-    let err, licences;
-    [err, licences] = await to(user.licences());
-
-    let licences_json = []
-    for (let i in licences){
-        let licence = licences[i];
-        licences_json.push(licence.toWeb())
-    }
-    return ReS(res, {licences: licences_json});
-}
+  [err, licences] = await to(
+    Licence.findOne({})
+    .populate("user")
+    .exec()
+  );
+  return ReS(res, { licences: licences.toWeb() });
+};
 module.exports.getAll = getAll;
 
 // const get = function(req, res){

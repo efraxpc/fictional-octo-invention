@@ -40,6 +40,8 @@ let UserSchema = mongoose.Schema(
         })
       ]
     },
+    user_id: {type: mongoose.Schema.Types.ObjectId, ref: "Licence"},
+    
     password: { type: String }
   },
   { timestamps: true }
@@ -94,14 +96,6 @@ UserSchema.methods.groups = async function() {
   return groups;
 };
 
-UserSchema.methods.licences = async function() {
-  let err, licences;
-  [err, licences] = await to(Licence.find({ "users.user": this._id }));
-  if (err) TE("err getting licences");
-  return licences;
-};
-
-
 UserSchema.virtual("full_name").set(function(name) {
   var split = name.split(" ");
   this.first = split[0];
@@ -135,7 +129,7 @@ UserSchema.methods.toWeb = function() {
 UserSchema.methods.toJSON = function() {
   const obj = this.toObject()
   delete obj.password
-  delete obj._v
+  delete obj.__v
   delete obj._id
   delete obj.updatedAt
   delete obj.createdAt

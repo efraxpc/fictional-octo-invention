@@ -6,12 +6,8 @@ let LicenceSchema = mongoose.Schema(
     description: { type: String },
     dueDate: { type: Date },
     active: { type: Boolean },
-    users: [
-      {
-        user: { type: mongoose.Schema.ObjectId, ref: "User" },
-        permissions: [{ type: String }]
-      }
-    ]
+    user: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+    
   },
   { timestamps: true }
 );
@@ -31,7 +27,7 @@ LicenceSchema.virtual("name").get(function() {
 });
 
 LicenceSchema.methods.toWeb = function() {
-  let json = this.toJSON({virtuals: true});
+  let json = this.toJSON({ virtuals: true });
   json.id = this._id; //this is for the front end
   return json;
 };
