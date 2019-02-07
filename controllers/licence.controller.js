@@ -5,11 +5,9 @@ const { to, ReE, ReS } = require("../services/util.service");
 const create = async function(req, res) {
   res.setHeader("Content-Type", "application/json");
   let err, licence;
-  let userEmail = req.body.user;
+  let user = req.body.user;
   let licence_info = req.body;
-  let user = User.findOne({ email: userEmail });
-
-  licence_info.users = [{ user }];
+  licence_info.user = { _id: user };
 
   [err, licence] = await to(Licence.create(licence_info));
 
@@ -21,14 +19,14 @@ module.exports.create = create;
 
 const getAll = async function(req, res) {
   res.setHeader("Content-Type", "application/json");
-  let licences_json = [];
 
   [err, licences] = await to(
-    Licence.findOne({})
-    .populate("user")
-    .exec()
+    Licence.find({})
+      .populate("user")
+      .exec()
   );
-  return ReS(res, { licences: licences.toWeb() });
+
+  return ReS(res, licences);
 };
 module.exports.getAll = getAll;
 
