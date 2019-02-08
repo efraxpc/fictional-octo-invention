@@ -30,12 +30,18 @@ const getAll = async function(req, res) {
 };
 module.exports.getAll = getAll;
 
-// const get = function(req, res){
-//     res.setHeader('Content-Type', 'application/json');
-//     let company = req.company;
-//     return ReS(res, {company:company.toWeb()});
-// }
-// module.exports.get = get;
+const get = function(req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  const id = req.params.id;
+  return Licence.findOne({_id:id}, function(err, licence) {
+    if (err) {
+      res.send("Error guetting licence");
+      next();
+    }
+    ReS(res, licence);
+  });
+};
+module.exports.get = get;
 
 // const update = async function(req, res){
 //     let err, company, data;
