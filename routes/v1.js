@@ -34,7 +34,7 @@ router.delete(  '/groups',           passport.authenticate('jwt', {session:false
 router.post(    '/licences',           passport.authenticate('jwt', {session:false}), LicenceController.create);     // C
 router.get(     '/licences',           passport.authenticate('jwt', {session:false}), LicenceController.getAll);     // R
 router.get(     '/licences/:id',       passport.authenticate('jwt', {session:false}), LicenceController.get);        // R
-//router.put(     '/licences',           passport.authenticate('jwt', {session:false}), LicenceController.update);     // U
+router.patch(   '/licences',         passport.authenticate('jwt', {session:false}), LicenceController.update);     // U
 //router.delete(  '/licences',           passport.authenticate('jwt', {session:false}), LicenceController.remove);     // D
 
 router.post(    '/companies',             passport.authenticate('jwt', {session:false}), CompanyController.create);                  // C

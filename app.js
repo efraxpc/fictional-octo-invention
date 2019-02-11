@@ -24,9 +24,9 @@ const models = require("./models");
 
 // CORS
 app.use(cors());
-
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use("/v1", v1);
+// app.use(cookieParser());
+// app.use(express.static(path.join(__dirname, 'public')));
 
 // Connect to Mongo Database
 

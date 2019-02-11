@@ -1,12 +1,21 @@
 const { Licence } = require("../models");
 const { User } = require("../models");
 const { to, ReE, ReS } = require("../services/util.service");
+var crypto = require("crypto");
 
 const create = async function(req, res) {
   res.setHeader("Content-Type", "application/json");
   let err, licence;
   let user = req.body.user;
+
+  const part1 = crypto.randomBytes(3).toString("hex");
+  const part2 = crypto.randomBytes(3).toString("hex");
+  const part3 = crypto.randomBytes(3).toString("hex");
+
+  req.body.key = `${part1}-${part2}-${part3}`;
+
   let licence_info = req.body;
+
   licence_info.user = { _id: user };
 
   [err, licence] = await to(Licence.create(licence_info));
@@ -31,9 +40,9 @@ const getAll = async function(req, res) {
 module.exports.getAll = getAll;
 
 const get = function(req, res) {
-  res.setHeader('Content-Type', 'application/json');
+  res.setHeader("Content-Type", "application/json");
   const id = req.params.id;
-  return Licence.findOne({_id:id}, function(err, licence) {
+  return Licence.findOne({ _id: id }, function(err, licence) {
     if (err) {
       res.send("Error guetting licence");
       next();
@@ -43,19 +52,32 @@ const get = function(req, res) {
 };
 module.exports.get = get;
 
-// const update = async function(req, res){
-//     let err, company, data;
-//     company = req.user;
-//     data = req.body;
-//     company.set(data);
+const update = async function(req, res) {
+  // res.setHeader("Content-Type", "application/json");
+  // console.log(req.body);
+  // const licences = Licence.findById(req.body._id, function(err, doc) {
+  //   doc.key = "jason bourne";
+  //   doc.save();
+  // });
 
-//     [err, company] = await to(company.save());
-//     if(err){
-//         return ReE(res, err);
-//     }
-//     return ReS(res, {company:company.toWeb()});
-// }
-// module.exports.update = update;
+  // return ReS(res, licences);
+
+  res.setHeader("Content-Type", "application/json");
+  let err, licence;
+  let user = req.body.user;
+
+  let licence_info = req.body;
+
+  licence_info.user = { _id: user };
+
+  [err, licence] = await to(Licence.update(licence_info));
+
+  if (err) return ReE(res, err, 422);
+
+  return ReS(res, { licence: licence }, 201);
+
+};
+module.exports.update = update;
 
 // const remove = async function(req, res){
 //     let company, err;
