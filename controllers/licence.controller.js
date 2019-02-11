@@ -58,29 +58,33 @@ const update = async function(req, res) {
 
   let licence_info = req.body;
 
-  [err, licence] = await to(Licence.findOneAndUpdate(
-    { _id: req.body._id },
-    { $set: licence_info },
-    { new: true },
-    (err, doc) => {
-      if (err) {
-        console.log("Something wrong when updating data!");
+  [err, licence] = await to(
+    Licence.findOneAndUpdate(
+      { _id: req.body._id },
+      { $set: licence_info },
+      { new: true },
+      (err, doc) => {
+        if (err) {
+          console.log("Something wrong when updating data!");
+        }
       }
-    }
-  ));
+    )
+  );
   if (err) return ReE(res, err, 422);
-  
+
   return ReS(res, { licence }, 201);
 };
 module.exports.update = update;
 
-// const remove = async function(req, res){
-//     let company, err;
-//     company = req.company;
-
-//     [err, company] = await to(company.remove());
-//     if(err) return ReE(res, 'error occured trying to delete the company');
-
-//     return ReS(res, {message:'Deleted Company'}, 204);
-// }
-// module.exports.remove = remove;
+const remove = async function(req, res) {
+  res.setHeader("Content-Type", "application/json");
+  await Licence.findByIdAndRemove(req.params.id, (err, licence) => {
+    if (err) return res.status(500).send(err);
+    const response = {
+      message: "Licence successfully deleted",
+      id: licence._id
+    };
+    return ReS(res, { response }, 200);
+  });
+};
+module.exports.remove = remove;
