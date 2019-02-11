@@ -53,29 +53,24 @@ const get = function(req, res) {
 module.exports.get = get;
 
 const update = async function(req, res) {
-  // res.setHeader("Content-Type", "application/json");
-  // console.log(req.body);
-  // const licences = Licence.findById(req.body._id, function(err, doc) {
-  //   doc.key = "jason bourne";
-  //   doc.save();
-  // });
-
-  // return ReS(res, licences);
-
   res.setHeader("Content-Type", "application/json");
   let err, licence;
-  let user = req.body.user;
 
   let licence_info = req.body;
 
-  licence_info.user = { _id: user };
-
-  [err, licence] = await to(Licence.update(licence_info));
-
+  [err, licence] = await to(Licence.findOneAndUpdate(
+    { _id: req.body._id },
+    { $set: licence_info },
+    { new: true },
+    (err, doc) => {
+      if (err) {
+        console.log("Something wrong when updating data!");
+      }
+    }
+  ));
   if (err) return ReE(res, err, 422);
-
-  return ReS(res, { licence: licence }, 201);
-
+  
+  return ReS(res, { licence }, 201);
 };
 module.exports.update = update;
 
